@@ -1,0 +1,12 @@
+# Ignore everything by default
+*
+
+# Track only Python, TOML, and Markdown files
+!*.py
+!*.toml
+!*.md
+!.gitignore
+
+# Exclude editor backup files
+*.py~
+*.py.bak
