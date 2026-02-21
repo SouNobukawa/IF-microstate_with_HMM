@@ -170,4 +170,4 @@ Columns 0–15: z-scored IF features; columns 16–31: z-scored IA features.
 
 If you use this code, please cite:
 
-> Nobukawa S, et al. "Age-related changes in EEG alpha-band microstates revealed by hidden Markov model analysis." *Frontiers in Aging Neuroscience* (2024).
+> under review
