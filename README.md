@@ -1,15 +1,15 @@
-# EEG Alpha-Band Microstate HMM Analysis for Aging
+# EEG Theta- and Alpha-Band Microstate HMM Analysis for Aging
 
 ## Project Overview
 
-This repository contains the analysis pipeline for studying age-related changes in EEG alpha-band (8–13 Hz) microstates using Hidden Markov Models (HMM). The pipeline extracts instantaneous frequency (IF) and instantaneous amplitude (IA) features from multichannel EEG, trains a Gaussian HMM, and compares microstate dwell times, occupancy, and state-transition probabilities between a young (HC) group and an older (AD) group.
+This repository contains the analysis pipeline for studying age-related changes in EEG theta- and alpha-band (4–13 Hz) microstates using Hidden Markov Models (HMM). The pipeline extracts instantaneous frequency (IF) and instantaneous amplitude (IA) features from multichannel EEG, trains a Gaussian HMM, and compares microstate dwell times, occupancy, and state-transition probabilities between a younger group and an older group.
 
 ## Background
 
-EEG microstates are quasi-stable patterns of scalp electric field topography that recur at the millisecond timescale and are thought to reflect global brain network dynamics. This study focuses on the alpha band (8–13 Hz) and uses an HMM-based approach to characterize how microstate statistics—dwell time, occupancy, and transition probabilities—change with aging.
+EEG microstates are quasi-stable patterns of scalp electric field topography that recur at the millisecond timescale and are thought to reflect global brain network dynamics. This study focuses on the theta-alpha band (4–13 Hz) and uses an HMM-based approach to characterize how microstate statistics—dwell time, occupancy, and transition probabilities—change with aging.
 
 **Key methodological steps:**
-1. FIR band-pass filtering in the alpha band (8–13 Hz)
+1. FIR band-pass filtering in the theta-alpha band (4–13 Hz)
 2. Analytic signal computation via Hilbert transform
 3. Instantaneous frequency (IF) from the derivative of the unwrapped phase
 4. Instantaneous amplitude (IA) proxy from the wrapped phase
@@ -45,11 +45,11 @@ Recommended minimum recording length: > 55 seconds (11 000 samples at 200 Hz) pe
 │       └── ...
 └── Frontiers_aging/
     └── code/              ← this repository
-        ├── low.txt        ← list of young/HC subject IDs (one per line)
-        └── high.txt       ← list of old/AD subject IDs (one per line)
+        ├── low.txt        ← list of younger subject IDs (one per line)
+        └── high.txt       ← list of older subject IDs (one per line)
 ```
 
-`low.txt` and `high.txt` are plain-text files listing subject IDs, one per line, matching the directory names under `HC_all_h_unwrap/`.
+`low.txt` and `high.txt` list subject IDs one per line, matching the directory names under `HC_all_h_unwrap/`.
 
 ## Installation
 
@@ -101,7 +101,7 @@ low.txt / high.txt
 01_preprocess.py
   ├── Load raw EEG (16 ch, tab-delimited)
   ├── Z-score across time
-  ├── FIR band-pass filter (alpha: 8–13 Hz)
+  ├── FIR band-pass filter (theta-alpha: 4–13 Hz)
   ├── Hilbert transform → analytic signal
   ├── Instantaneous frequency (IF): d/dt unwrapped phase
   ├── Instantaneous amplitude (IA): wrapped phase
@@ -144,9 +144,9 @@ low.txt / high.txt
 
 | Variable | Shape | Description |
 |----------|-------|-------------|
-| `c_z_diff`    | `[N_all × 10000, 32]` | All subjects (Young then Old) |
-| `c_z_diff_hc` | `[N_hc  × 10000, 32]` | Young/HC group only |
-| `c_z_diff_ad` | `[N_ad  × 10000, 32]` | Old/AD group only |
+| `c_z_diff`    | `[N_all × 10000, 32]` | All subjects (younger then older) |
+| `c_z_diff_hc` | `[N_hc  × 10000, 32]` | Younger group only |
+| `c_z_diff_ad` | `[N_ad  × 10000, 32]` | Older group only |
 
 Columns 0–15: z-scored IF features; columns 16–31: z-scored IA features.
 
@@ -156,7 +156,7 @@ Columns 0–15: z-scored IF features; columns 16–31: z-scored IA features.
 |-----------|-------|-------------|
 | Sampling rate | 200 Hz | EEG acquisition rate |
 | Channels | 16 | Standard 10-20 system subset |
-| Alpha band | 8–13 Hz | Band-pass filter cutoffs |
+| Theta-alpha band | 4–13 Hz | Band-pass filter cutoffs |
 | FIR order | `floor(T/3)` taps | Linear-phase FIR (odd taps enforced) |
 | Median filter kernel | 21 | Corresponds to MATLAB `medfilt1(X, 20)` |
 | Epoch length | 10 000 samples (50 s) | Samples 1001–11000 per subject |

@@ -1,11 +1,11 @@
 """01_preprocess.py
 
-EEG preprocessing pipeline for alpha-band microstate HMM analysis.
+EEG preprocessing pipeline for theta- and alpha-band microstate HMM analysis.
 
 For each subject:
   1. Load raw EEG (tab-delimited, 16 channels)
   2. Z-score normalize across time
-  3. Band-pass filter in the alpha band (8-13 Hz) using a linear-phase FIR filter
+  3. Band-pass filter in the theta-alpha band (4-13 Hz) using a linear-phase FIR filter
   4. Compute analytic signal via Hilbert transform
   5. Extract instantaneous frequency (IF) from unwrapped phase derivative
   6. Extract instantaneous amplitude (IA) from wrapped phase
@@ -16,10 +16,10 @@ For each subject:
 
 Output: result_Y_O_IF_IA.mat containing
   - c_z_diff      : all subjects stacked [N_all * 10000, 32]
-  - c_z_diff_hc   : young/HC group        [N_hc  * 10000, 32]
-  - c_z_diff_ad   : old/AD group          [N_ad  * 10000, 32]
+  - c_z_diff_hc   : younger group        [N_hc  * 10000, 32]
+  - c_z_diff_ad   : older group          [N_ad  * 10000, 32]
 
-Subject lists are read from low.txt (young/HC) and high.txt (old/AD).
+Subject lists are read from low.txt (younger) and high.txt (older).
 Data files are expected at ../../DPD/HC_all_h_unwrap/<id>/<id>.txt
 relative to this script's directory.
 """
@@ -40,7 +40,7 @@ np.random.seed(1)  # Reproducibility (MATLAB: rng(1))
 Fs = 200                         # Sampling rate (Hz)
 Fl = [2, 4, 4, 13, 30]          # High-pass cutoff frequencies (Hz)
 Fh = [4, 8, 13, 30, 60]         # Low-pass cutoff frequencies (Hz)
-BAND_IDX = 2                     # Alpha band index: 8-13 Hz
+BAND_IDX = 2                     # Theta-alpha band index: 4-13 Hz
 
 # MATLAB front_list / occi_list (1-indexed) converted to 0-indexed
 front_list = [0, 1, 2, 3, 10, 11, 12]  # MATLAB: [1 2 3 4 11 12 13]
@@ -72,7 +72,7 @@ for cate_idx, cate_file in enumerate(CATE_FILE_NAMES):
     with open(cate_path) as f:
         cate_list = [line.strip() for line in f if line.strip()]
 
-    group_name = 'Young/HC' if cate_idx == 0 else 'Old/AD'
+    group_name = 'Younger' if cate_idx == 0 else 'Older'
     print(f"Category {cate_idx + 1} ({group_name}): {len(cate_list)} subjects")
 
     for c_i, subj_name in enumerate(cate_list):
@@ -90,7 +90,7 @@ for cate_idx, cate_file in enumerate(CATE_FILE_NAMES):
         # Z-score across time (MATLAB: zscore(RawData) → axis=0)
         ZsRawData = scipy.stats.zscore(RawData, axis=0)
 
-        # --- FIR band-pass filter (alpha: 8-13 Hz) ---
+        # --- FIR band-pass filter (theta-alpha: 4-13 Hz) ---
         passband = [Fl[BAND_IDX] / (Fs / 2), Fh[BAND_IDX] / (Fs / 2)]
 
         # MATLAB: fir1(floor(T/3) - 1, passband)
