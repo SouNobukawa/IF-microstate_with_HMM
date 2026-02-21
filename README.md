@@ -84,6 +84,9 @@ uv run python 03_analyze_dwell_occ.py
 
 # Step 4: Analyse state-transition probabilities → SVG figures
 uv run python 04_analyze_transition.py
+
+# Step 5: Plot IF-microstate topomaps per state and group → SVG figures
+uv run python 05_plot_topomap.py
 ```
 
 Each script resolves file paths relative to its own location, so it can also be run from any working directory using an absolute path:
@@ -126,6 +129,14 @@ low.txt / high.txt
   │   → t-test / MWU           │   → t-test / MWU
   ├── FDR correction           ├── FDR correction
   └── Save SVG figures         └── Save SVG figures
+                        │
+                        ▼
+             05_plot_topomap.py
+               ├── Mean IF vector per state & group
+               ├── MNE topomap → SVG (per state × group)
+               ├── Transition probability t-test + FDR
+               ├── Dwell time t-test + FDR
+               └── Occupancy t-test + FDR
 ```
 
 ## Output Files
@@ -137,8 +148,10 @@ low.txt / high.txt
 | `03_analyze_dwell_occ.py` | `dwell_time_violin.svg` | Violin plot: mean dwell time (seconds) per state |
 | `03_analyze_dwell_occ.py` | `occupancy_violin.svg` | Violin plot: occupancy per state |
 | `04_analyze_transition.py` | `transition_probability.svg` | Signed significance map (sign × -log10 q) |
-| `04_analyze_transition.py` | `transition_probability_young.svg` | Mean transition matrix, Young group |
-| `04_analyze_transition.py` | `transition_probability_old.svg` | Mean transition matrix, Old group |
+| `04_analyze_transition.py` | `transition_probability_young.svg` | Mean transition matrix, younger group |
+| `04_analyze_transition.py` | `transition_probability_old.svg` | Mean transition matrix, older group |
+| `05_plot_topomap.py` | `topomap_IF_GroupYounger_State{n}.svg` | IF-microstate topomap, younger group (n = 1…N) |
+| `05_plot_topomap.py` | `topomap_IF_GroupOlder_State{n}.svg` | IF-microstate topomap, older group (n = 1…N) |
 
 ### Variables in `result_Y_O_IF_IA.mat`
 
