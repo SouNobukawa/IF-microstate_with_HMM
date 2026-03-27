@@ -183,4 +183,6 @@ Columns 0–15: z-scored IF features; columns 16–31: z-scored IA features.
 
 If you use this code, please cite:
 
-> under review
+> Nobukawa S, Ikeda T, Kikuchi M and Takahashi T (2026) Age-group differences between young and middle-aged adults in spatiotemporal EEG dynamics revealed by instantaneous frequency microstate analysis. *Front. Aging Neurosci.* 18:1707228. doi: 10.3389/fnagi.2026.1707228
+>
+> https://www.frontiersin.org/journals/aging-neuroscience/articles/10.3389/fnagi.2026.1707228/full
